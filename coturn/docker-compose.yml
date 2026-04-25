@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  coturn:
+    image: coturn/coturn:latest
+    container_name: learnforge_coturn
+    network_mode: "host" # Running in host mode is recommended for Coturn to avoid NAT issues on the host itself
+    restart: unless-stopped
+    volumes:
+      - ./turnserver.conf:/etc/coturn/turnserver.conf:ro
+      # Uncomment if using TLS:
+      # - /path/to/your/certs:/etc/coturn/certs:ro
+      # - ./coturn-logs:/var/log/coturn:rw
+    command: ["-c", "/etc/coturn/turnserver.conf"]
