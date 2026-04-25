@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  excalidraw-db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${EXCALIDRAW_DB_USER}
+      POSTGRES_PASSWORD: ${EXCALIDRAW_DB_PASS}
+      POSTGRES_DB: excalidraw_db
+    volumes:
+      - excalidraw-db-data:/var/lib/postgresql/data
+    networks:
+      meet.jitsi:
+
+  excalidraw-backend:
+    image: ghcr.io/kitsteam/excalidraw-storage-backend:latest
+    depends_on:
+      - excalidraw-db
+    environment:
+      - PORT=8080
+      # Docker will inject the variables from your .env file into this URL
+      - STORAGE_URI=postgresql://${EXCALIDRAW_DB_USER}:${EXCALIDRAW_DB_PASS}@excalidraw-db:5432/excalidraw_db
+      - ENABLE_POSTGRES_TOUCH=true
+    ports:
+      - "8080:8080"
+    networks:
+      meet.jitsi:
+
+volumes:
+  excalidraw-db-data:
