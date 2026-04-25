@@ -113,8 +113,9 @@ For local testing, you can manually generate a token using jwt.io:
 
 ### Joining the Room
 To join your local meeting as an authenticated moderator, append the token to your URL like this:
+```
 https://localhost:8443/MyTestRoom?jwt=<PASTE_YOUR_TOKEN_HERE>
-
+```
 🛑 Shutting Down
 To stop the servers and free up your system resources, run:
 
