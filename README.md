@@ -123,3 +123,34 @@ To stop the servers and free up your system resources, run:
 docker compose down
 ```
 (Note: Running docker compose down will keep your Docker volumes intact. Your whiteboard drawings will still be there the next time you spin the stack up).
+
+## Port 8080 Conflict Note
+
+The Excalidraw backend is exposed on host port `8080`. JVB's Colibri REST port also defaults to host `8080`, so local startup can fail with:
+
+```text
+Bind for 0.0.0.0:8080 failed: port is already allocated
+```
+
+Set this in `.env` to move JVB's host Colibri REST port to `8081`:
+
+```dotenv
+JVB_COLIBRI_PORT=8081
+```
+
+You can also use a temporary shell override instead of changing `.env`:
+
+PowerShell:
+
+```powershell
+$env:JVB_COLIBRI_PORT='8081'
+docker compose up -d
+```
+
+Git Bash:
+
+```bash
+JVB_COLIBRI_PORT=8081 docker compose up -d
+```
+
+This keeps Excalidraw available at `http://localhost:8080` and exposes JVB Colibri REST at `127.0.0.1:8081`.

@@ -57,6 +57,30 @@ Default local ports from `env.example` are:
 - Jitsi HTTPS: `https://localhost:8443`
 - Excalidraw backend: `http://localhost:8080`
 - JVB UDP media: `10000/udp`
+- JVB Colibri REST defaults to host `127.0.0.1:8080` unless `JVB_COLIBRI_PORT` is set.
+
+Because this project exposes Excalidraw on host port `8080`, JVB's default Colibri REST host port can conflict with it. Set this persistent local override in `.env` when needed:
+
+```dotenv
+JVB_COLIBRI_PORT=8081
+```
+
+If avoiding `.env` changes, use a temporary shell override when starting the stack:
+
+PowerShell:
+
+```powershell
+$env:JVB_COLIBRI_PORT='8081'
+docker compose up -d
+```
+
+Git Bash:
+
+```bash
+JVB_COLIBRI_PORT=8081 docker compose up -d
+```
+
+Do not commit local `.env` secrets.
 
 ## Start The Stack
 
@@ -146,5 +170,5 @@ docker compose down -v
 
 - Do not run `docker compose down -v` unless the user explicitly asks to delete persisted local data.
 - Do not regenerate `.env` passwords if `.env` already exists unless the user explicitly asks.
-- If ports `8000`, `8443`, `8080`, or `10000/udp` are already in use, report the conflict and update `.env` only with user approval.
+- If ports `8000`, `8443`, `8080`, `8081`, or `10000/udp` are already in use, report the conflict. For the JVB/Excalidraw `8080` conflict, use `JVB_COLIBRI_PORT=8081` in `.env` or as a one-command shell override.
 - Prefer checking `docker compose ps` and targeted service logs before changing configuration.
